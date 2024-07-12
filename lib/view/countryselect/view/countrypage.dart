@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:login_app/constants/constants.dart';
 import 'package:login_app/constants/textstyles.dart';
-import 'package:login_app/model/countrmodel.dart';
 import 'package:login_app/provider/countryprovider.dart';
+import 'package:login_app/provider/otpprovider.dart';
 import 'package:login_app/view/countryselect/widgets/customtextfield.dart';
 import 'package:login_app/view/phonepage/view/phonepage.dart';
 import 'package:neumorphic_button/neumorphic_button.dart';
 import 'package:provider/provider.dart';
 
 class CountryPage extends StatefulWidget {
-  const CountryPage({super.key});
+  const CountryPage({super.key, required this.type});
+  final String type;
 
   @override
   State<CountryPage> createState() => _CountryPageState();
@@ -30,6 +31,7 @@ class _CountryPageState extends State<CountryPage> {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<OtpProvider>(context, listen: false).typeofLogin(widget.type);
     final countryProvider =
         Provider.of<Countryprovider>(context, listen: false);
     final size = MediaQuery.of(context).size;
@@ -130,8 +132,15 @@ class _CountryPageState extends State<CountryPage> {
                                           Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                  builder: (_) =>
-                                                      const Phonepage()));
+                                                  builder: (_) => Phonepage(
+                                                        country:
+                                                            countries[index]
+                                                                .code!,
+                                                        image: countries[index]
+                                                            .flag!,
+                                                        code: countries[index]
+                                                            .telCode!,
+                                                      )));
                                         },
                                         child: Row(
                                           mainAxisAlignment:
@@ -150,7 +159,15 @@ class _CountryPageState extends State<CountryPage> {
                                                     fit: BoxFit.cover,
                                                   ),
                                                 ),
-                                                Text(countries[index].name!),
+                                                SizedBox(
+                                                  width: size.width * 0.35,
+                                                  child: Text(
+                                                    countries[index].name!,
+                                                    maxLines: 2,
+                                                    // overflow:
+                                                    //     TextOverflow.ellipsis,
+                                                  ),
+                                                ),
                                               ],
                                             ),
                                             Text(countries[index].telCode!),

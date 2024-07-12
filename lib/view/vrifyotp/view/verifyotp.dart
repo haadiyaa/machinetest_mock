@@ -1,36 +1,15 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:login_app/constants/constants.dart';
 import 'package:login_app/constants/textstyles.dart';
-import 'package:login_app/provider/otpprovider.dart';
-import 'package:login_app/view/vrifyotp/view/verifyotp.dart';
 import 'package:neumorphic_button/neumorphic_button.dart';
-import 'package:provider/provider.dart';
+import 'package:pinput/pinput.dart';
 
-class Phonepage extends StatefulWidget {
-  const Phonepage({
-    super.key,
-    required this.code,
-    required this.image,
-    required this.country,
-  });
-  final String code;
-  final String country;
-  final String image;
-
-  @override
-  State<Phonepage> createState() => _PhonepageState();
-}
-
-class _PhonepageState extends State<Phonepage> {
+class VerifyNumberPage extends StatelessWidget {
+  VerifyNumberPage({super.key});
   final controller = TextEditingController();
   final _key = GlobalKey<FormState>();
-  @override
-  void initState() {
-    print('code ${widget.code} ');
-    super.initState();
-  }
+  final validPin = '4301';
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +57,7 @@ class _PhonepageState extends State<Phonepage> {
                   ],
                 ),
                 const Text(
-                  'Enter Phone Number',
+                  'Verify Number',
                   style: MyTextStyle.heading1,
                 ),
                 Padding(
@@ -88,55 +67,67 @@ class _PhonepageState extends State<Phonepage> {
                     children: [
                       const Text(
                         textAlign: TextAlign.center,
-                        'Please enter your 10 digit mobile\nnumber to receive OTP',
+                        'Please enter the OTP received to\nverify your number ',
                         style: TextStyle(color: Constants.textcolor2),
                       ),
                       Constants.height20,
-                      SizedBox(
-                        width: size.width,
-                        child: Row(
-                          children: [
-                            CountryCodePicker(
-                              initialSelection: widget.country,
-                            ),
-                            Expanded(
-                              child: Form(
-                                key: _key,
-                                child: TextFormField(
-                                  controller: controller,
-                                  validator: (value) {
-                                    return RegExp(r'^([6-9][0-9]{9})$')
-                                            .hasMatch(value!)
-                                        ? null
-                                        : 'Please enter a valid mobile number';
-                                  },
-                                  decoration: const InputDecoration(
-                                    hintText: '9999999999',
-                                    hintStyle:
-                                        const TextStyle(letterSpacing: 3),
-                                  ),
+                      Form(
+                        key: _key,
+                        child: Pinput(
+                          controller: controller,
+                          errorBuilder: (errorText, pin) {
+                            return Padding(
+                              padding: EdgeInsets.symmetric(vertical: 10),
+                              child: Center(
+                                child: Text(
+                                  errorText!,
+                                  style: TextStyle(color: Colors.red),
                                 ),
                               ),
-                            ),
-                          ],
+                            );
+                          },
+                          validator: (value) {
+                            return value == validPin
+                                ? null
+                                : 'OTP does not match, please try again';
+                          },
+                          onCompleted: (value) {
+                            print(value);
+                          },
+                          length: 4,
+                          pinAnimationType: PinAnimationType.slide,
+                          defaultPinTheme: MyTextStyle.defaultPinTheme,
+                          showCursor: true,
+                          cursor: MyTextStyle.cursor,
+                          preFilledWidget: MyTextStyle.preFilledWidget,
                         ),
                       ),
-
                       SizedBox(
-                        height: size.height * 0.3,
+                        height: size.height * 0.1,
+                      ),
+                      const Text(
+                        'Did\'nt receive OTP?',
+                        style:
+                            TextStyle(color: Color.fromARGB(255, 97, 97, 97)),
+                      ),
+                      Constants.height10,
+                      TextButton(
+                        style: TextButton.styleFrom(
+                            foregroundColor: Constants.textcolor2),
+                        onPressed: () {},
+                        child: const Text(
+                          'Resend OTP',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ),
+                      SizedBox(
+                        height: size.height * 0.2,
                       ),
                       Padding(
                         padding: const EdgeInsets.all(10),
                         child: NeumorphicButton(
                           onTap: () {
-                            if (_key.currentState!.validate()) {
-                              Provider.of<OtpProvider>(context, listen: false)
-                                  .sendOtp(widget.code, controller.text.trim());
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => VerifyNumberPage()));
-                            }
+                            _key.currentState!.validate();
                           },
                           bottomRightShadowBlurRadius: 15,
                           bottomRightShadowSpreadRadius: 1,
@@ -153,7 +144,7 @@ class _PhonepageState extends State<Phonepage> {
                           topLeftOffset: const Offset(-5, -5),
                           child: const Center(
                             child: Text(
-                              'Get OTP',
+                              'Verify',
                               style: TextStyle(fontSize: 18),
                             ),
                           ),

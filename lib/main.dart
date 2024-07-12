@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:login_app/provider/countryprovider.dart';
+import 'package:login_app/provider/otpprovider.dart';
 import 'package:login_app/view/welcomepage/view/welcomepage.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +16,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => Countryprovider()),
+        ChangeNotifierProvider(create: (context) => OtpProvider()),
       ],
       child: MaterialApp(
         theme: ThemeData(

@@ -13,6 +13,13 @@ class Countryprovider extends ChangeNotifier {
   String get error => _error;
   List<Data>? searchList = [];
 
+  // String logintype='';
+
+  // void typeofLogin(String type){
+  //   logintype=type;
+  //   notifyListeners();
+  // }
+
   Country? country;
   void fetchCountry() async {
     _isLoading = true;

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:login_app/constants/constants.dart';
 import 'package:login_app/constants/textstyles.dart';
+import 'package:login_app/provider/otpprovider.dart';
 import 'package:login_app/view/countryselect/view/countrypage.dart';
 import 'package:neumorphic_button/neumorphic_button.dart';
+import 'package:provider/provider.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final otpProvider=Provider.of<OtpProvider>(context, listen: false);
     final size = MediaQuery.of(context).size;
     return Scaffold(
       body: Container(
@@ -60,7 +63,8 @@ class WelcomePage extends StatelessWidget {
                             padding: const EdgeInsets.all(10),
                             child: NeumorphicButton(
                               onTap: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (_)=>const CountryPage()));
+                                
+                                Navigator.push(context, MaterialPageRoute(builder: (_)=>const CountryPage(type: Constants.studentt,)));
                               },
                               bottomRightShadowBlurRadius: 15,
                               bottomRightShadowSpreadRadius: 1,
@@ -96,7 +100,7 @@ class WelcomePage extends StatelessWidget {
                             padding: const EdgeInsets.all(10),
                             child: NeumorphicButton(
                               onTap: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (_)=>const CountryPage()));
+                                Navigator.push(context, MaterialPageRoute(builder: (_)=>const CountryPage(type: Constants.agent,)));
                               },
                               bottomRightShadowBlurRadius: 15,
                               bottomRightShadowSpreadRadius: 1,

@@ -11,6 +11,7 @@ class Constants {
   static const SizedBox height5 = SizedBox(height: 5);
   static const SizedBox height10 = SizedBox(height: 10);
   static const SizedBox height20 = SizedBox(height: 20);
+  // static const SizedBox height20 = SizedBox(height: 20);
   static const SizedBox height15 = SizedBox(height: 15);
   static const SizedBox height8 = SizedBox(height: 8);
   //=====================WIDTH========================
@@ -23,4 +24,8 @@ class Constants {
   static const Color textcolor2= Color.fromARGB(255, 175, 111, 85);
   static const Color grey=Colors.grey;
   static const Color white=Colors.white;
+
+  //===========================
+  static const String studentt='student';
+  static const String agent='agent';
 }

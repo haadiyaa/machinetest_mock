@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:login_app/model/countrmodel.dart';
+import 'package:login_app/model/countryselect.dart';
+import 'package:login_app/model/selectcountrymodel.dart';
 import 'package:login_app/secrets/secrets.dart';
 
 class Countryprovider extends ChangeNotifier {
@@ -12,13 +14,7 @@ class Countryprovider extends ChangeNotifier {
   String _error = "";
   String get error => _error;
   List<Data>? searchList = [];
-
-  // String logintype='';
-
-  // void typeofLogin(String type){
-  //   logintype=type;
-  //   notifyListeners();
-  // }
+  SelectCountyModel? selectCountyModel;
 
   Country? country;
   void fetchCountry() async {
@@ -52,10 +48,47 @@ class Countryprovider extends ChangeNotifier {
         notifyListeners();
         print('empty ${searchList!.length}');
       } else {
-        searchList = countries!.where((element) => element.name!.toLowerCase().contains(text.toLowerCase())).toList();
+        searchList = countries!
+            .where((element) =>
+                element.name!.toLowerCase().contains(text.toLowerCase()))
+            .toList();
         print('search ${searchList!.length}');
         notifyListeners();
       }
+    }
+  }
+
+  void selectCountry() async {
+    try {
+      selectCountyModel = SelectCountyModel.fromJson(countryjson);
+      notifyListeners();
+    } catch (e) {
+      _error = 'Failed to fetch countries ${e.toString()}';
+      print(_error);
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  Future<void> selectedCountry(String id) async {
+    try {
+      final response = await http.post(
+        Uri.parse(Secrets.selCountryPostUrl),
+        body: {
+          "country_id": id,
+        },
+      );
+      final data = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        _error = 'Error';
+        print('error');
+      }
+      notifyListeners();
+    } catch (e) {
+      _error = 'Failed to fetch countries ${e.toString()}';
+      print(_error);
+    } finally {
+      notifyListeners();
     }
   }
 }

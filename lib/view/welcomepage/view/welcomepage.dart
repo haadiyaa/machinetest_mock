@@ -11,7 +11,7 @@ class WelcomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final otpProvider=Provider.of<OtpProvider>(context, listen: false);
+    // final otpProvider=Provider.of<OtpProvider>(context, listen: false);
     final size = MediaQuery.of(context).size;
     return Scaffold(
       body: Container(
@@ -53,7 +53,7 @@ class WelcomePage extends StatelessWidget {
                   Constants.height10,
                   const Text('Please select your role to get registered',
                       style: MyTextStyle.heading4),
-                      const Spacer(),
+                  const Spacer(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -63,8 +63,15 @@ class WelcomePage extends StatelessWidget {
                             padding: const EdgeInsets.all(10),
                             child: NeumorphicButton(
                               onTap: () {
-                                
-                                Navigator.push(context, MaterialPageRoute(builder: (_)=>const CountryPage(type: Constants.studentt,)));
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => const CountryPage(
+                                              type: Constants.studentt,
+                                            )));
+
+                                Provider.of<OtpProvider>(context, listen: false)
+                                    .typeofLogin(Constants.studentt);
                               },
                               bottomRightShadowBlurRadius: 15,
                               bottomRightShadowSpreadRadius: 1,
@@ -100,7 +107,14 @@ class WelcomePage extends StatelessWidget {
                             padding: const EdgeInsets.all(10),
                             child: NeumorphicButton(
                               onTap: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (_)=>const CountryPage(type: Constants.agent,)));
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => const CountryPage(
+                                              type: Constants.agent,
+                                            )));
+                                            Provider.of<OtpProvider>(context, listen: false)
+                                    .typeofLogin(Constants.agent);
                               },
                               bottomRightShadowBlurRadius: 15,
                               bottomRightShadowSpreadRadius: 1,
@@ -131,12 +145,16 @@ class WelcomePage extends StatelessWidget {
                         ],
                       ),
                     ],
-                  ),const Spacer(),
+                  ),
+                  const Spacer(),
                   const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text('By continuing you agree to our'),
-                      Text(' Terms and Conditions',style: TextStyle(color:Constants.textcolor2),),
+                      Text(
+                        ' Terms and Conditions',
+                        style: TextStyle(color: Constants.textcolor2),
+                      ),
                     ],
                   )
                 ],

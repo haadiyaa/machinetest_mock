@@ -2,18 +2,35 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:login_app/constants/constants.dart';
 import 'package:login_app/constants/textstyles.dart';
+import 'package:login_app/provider/otpprovider.dart';
+import 'package:login_app/view/home/view/homepage.dart';
+import 'package:login_app/view/selectcountry/view/selectcountry.dart';
 import 'package:neumorphic_button/neumorphic_button.dart';
 import 'package:pinput/pinput.dart';
+import 'package:provider/provider.dart';
 
-class VerifyNumberPage extends StatelessWidget {
-  VerifyNumberPage({super.key});
+class VerifyNumberPage extends StatefulWidget {
+  VerifyNumberPage({super.key, required this.phone});
+  final String phone;
+
+  @override
+  State<VerifyNumberPage> createState() => _VerifyNumberPageState();
+}
+
+class _VerifyNumberPageState extends State<VerifyNumberPage> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   final controller = TextEditingController();
+
   final _key = GlobalKey<FormState>();
-  final validPin = '4301';
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final otpProvider = Provider.of<OtpProvider>(context, listen: false);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(
@@ -87,7 +104,7 @@ class VerifyNumberPage extends StatelessWidget {
                             );
                           },
                           validator: (value) {
-                            return value == validPin
+                            return value!.length == 4
                                 ? null
                                 : 'OTP does not match, please try again';
                           },
@@ -114,7 +131,16 @@ class VerifyNumberPage extends StatelessWidget {
                       TextButton(
                         style: TextButton.styleFrom(
                             foregroundColor: Constants.textcolor2),
-                        onPressed: () {},
+                        onPressed: () {
+                          Provider.of<OtpProvider>(context, listen: false)
+                              .resendOtp(widget.phone)
+                              .then(
+                            (value) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(otpProvider.msg)));
+                            },
+                          );
+                        },
                         child: const Text(
                           'Resend OTP',
                           style: TextStyle(fontSize: 18),
@@ -127,7 +153,14 @@ class VerifyNumberPage extends StatelessWidget {
                         padding: const EdgeInsets.all(10),
                         child: NeumorphicButton(
                           onTap: () {
-                            _key.currentState!.validate();
+                            if (_key.currentState!.validate()) {
+                              otpProvider
+                                  .verifyOtp(controller.text, widget.phone);
+                                  Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) => Selectcountry()));
+                            }
                           },
                           bottomRightShadowBlurRadius: 15,
                           bottomRightShadowSpreadRadius: 1,

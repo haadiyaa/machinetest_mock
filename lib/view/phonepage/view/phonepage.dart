@@ -26,6 +26,7 @@ class Phonepage extends StatefulWidget {
 class _PhonepageState extends State<Phonepage> {
   final controller = TextEditingController();
   final _key = GlobalKey<FormState>();
+
   @override
   void initState() {
     print('code ${widget.code} ');
@@ -35,6 +36,7 @@ class _PhonepageState extends State<Phonepage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final otpProvider = Provider.of<OtpProvider>(context, listen: false);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(
@@ -110,6 +112,7 @@ class _PhonepageState extends State<Phonepage> {
                                         ? null
                                         : 'Please enter a valid mobile number';
                                   },
+                                  keyboardType: TextInputType.phone,
                                   decoration: const InputDecoration(
                                     hintText: '9999999999',
                                     hintStyle:
@@ -130,12 +133,37 @@ class _PhonepageState extends State<Phonepage> {
                         child: NeumorphicButton(
                           onTap: () {
                             if (_key.currentState!.validate()) {
-                              Provider.of<OtpProvider>(context, listen: false)
-                                  .sendOtp(widget.code, controller.text.trim());
+                              if (otpProvider.logintype == Constants.agent) {
+                                Provider.of<OtpProvider>(context, listen: false)
+                                    .agentOtp(
+                                        widget.code, controller.text.trim())
+                                    .then(
+                                  (value) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            content: Text(otpProvider.msg)));
+                                  },
+                                );
+                              } else if(otpProvider.logintype==Constants.student){
+                                Provider.of<OtpProvider>(context, listen: false)
+                                    .studentOtp(
+                                        widget.code, controller.text.trim())
+                                    .then(
+                                  (value) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            content: Text(otpProvider.msg)));
+                                  },
+                                );
+                              }
+
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (_) => VerifyNumberPage()));
+                                      builder: (_) => VerifyNumberPage(
+                                            phone:
+                                                '${widget.code}${controller.text}',
+                                          )));
                             }
                           },
                           bottomRightShadowBlurRadius: 15,

@@ -31,7 +31,6 @@ class _CountryPageState extends State<CountryPage> {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<OtpProvider>(context, listen: false).typeofLogin(widget.type);
     final countryProvider =
         Provider.of<Countryprovider>(context, listen: false);
     final size = MediaQuery.of(context).size;

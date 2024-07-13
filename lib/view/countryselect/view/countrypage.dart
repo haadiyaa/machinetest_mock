@@ -3,7 +3,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:login_app/constants/constants.dart';
 import 'package:login_app/constants/textstyles.dart';
 import 'package:login_app/provider/countryprovider.dart';
-import 'package:login_app/provider/otpprovider.dart';
 import 'package:login_app/view/countryselect/widgets/customtextfield.dart';
 import 'package:login_app/view/phonepage/view/phonepage.dart';
 import 'package:neumorphic_button/neumorphic_button.dart';

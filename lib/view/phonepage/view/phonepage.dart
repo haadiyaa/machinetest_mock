@@ -143,8 +143,19 @@ class _PhonepageState extends State<Phonepage> {
                                         SnackBar(
                                             content: Text(otpProvider.msg)));
                                   },
+                                ).then(
+                                  (value) {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) => VerifyNumberPage(
+                                                  phone:
+                                                      '${widget.code}${controller.text}',
+                                                )));
+                                  },
                                 );
-                              } else if(otpProvider.logintype==Constants.student){
+                              } else if (otpProvider.logintype ==
+                                  Constants.student) {
                                 Provider.of<OtpProvider>(context, listen: false)
                                     .studentOtp(
                                         widget.code, controller.text.trim())
@@ -154,16 +165,26 @@ class _PhonepageState extends State<Phonepage> {
                                         SnackBar(
                                             content: Text(otpProvider.msg)));
                                   },
+                                ).then(
+                                  (value) {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) => VerifyNumberPage(
+                                                  phone:
+                                                      '${widget.code}${controller.text}',
+                                                )));
+                                  },
                                 );
                               }
 
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => VerifyNumberPage(
-                                            phone:
-                                                '${widget.code}${controller.text}',
-                                          )));
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: (_) => VerifyNumberPage(
+                              //               phone:
+                              //                   '${widget.code}${controller.text}',
+                              //             )));
                             }
                           },
                           bottomRightShadowBlurRadius: 15,
